@@ -19,29 +19,24 @@ from helpers import (
 
 async def scrape(url):
     try:
+        print("scrape fnc started")
         request = requests.get(url)
         soup = BeautifulSoup(request.content, "html5lib")
         return request, soup
     except Exception as e:
         print(e)
         return None, None
-
-
-
-
-
-
-
-
-    
+        print("scrape fnc finished")
 
 
 async def all_video_scraping(bot,query):
     try:
+        print("all video scraping started")
         message = query.message
         chat_id = message.chat.id
         txt = await message.reply_text("Scraping url ...", quote=True)
         request, soup = await scrape(message.text)
+        print("all video scraping: phase 1")
 
         video_tags = soup.find_all("video")
 
@@ -49,6 +44,7 @@ async def all_video_scraping(bot,query):
             video["src"] if video.has_attr("src") else video.find("source")["src"]
             for video in video_tags
         ]
+        print("all video scraping phase 2")
 
         txt = await txt.edit(
             text=f"Found {len(video_links)} Videos", disable_web_page_preview=True
@@ -71,16 +67,19 @@ async def all_video_scraping(bot,query):
                 video_data, local_filename = await download_media(
                     message.text, video_link, idx, "video"
                 )
+                print("all video scraping: phase 3")
 
                 if video_data:
                     with open(os.path.join(folder_name, local_filename), "wb") as file:
                         file.write(video_data)
 
                 time.sleep(0.3)
+                print("all video scraping: phase 4")
 
             await status.edit("Uploading ....")
             zip_filename = f"{folder_name}.zip"
             shutil.make_archive(folder_name, "zip", folder_name)
+            print("all video scraping: phase 5")
 
             c_time = time.time()
             await bot.send_chat_action(chat_id, enums.ChatAction.UPLOAD_VIDEO)
@@ -90,6 +89,7 @@ async def all_video_scraping(bot,query):
                 progress=progress_for_pyrogram,
                 progress_args=('Uploading',status,c_time)  
             )
+            print("all video scraping: vid sent")
             # await message.reply_video(local_filename)
             await status.delete()
             await txt.delete()
@@ -97,6 +97,7 @@ async def all_video_scraping(bot,query):
             await asyncio.sleep(1)
             os.remove(zip_filename)
             return
+            print("all video scraping finished")
 
         else:
             await txt.edit(text=f"No Videos Found!!!", disable_web_page_preview=True)
