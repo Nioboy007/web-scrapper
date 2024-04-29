@@ -34,18 +34,10 @@ async def start(_, message: Message):
 
 @app.on_callback_query()
 async def cb_data(bot:Client, update):
-    elif update.data == "cballvideo":
+    if update.data == "cballvideo":
         await all_video_scraping(bot,update)
-    elif update.data == "cballpdf":
-        await all_pdf_scraping(update)
-  
-        else:
-            await update.message.reply('You must provide a Log Channel ID')
-
     else:
-        await update.message.edit_text(
-            text=START_TEXT, disable_web_page_preview=True, reply_markup=START_BUTTON
-        )
+        await update.message.reply('You must provide a Log Channel ID')
 
 
 @app.on_message(
