@@ -4,7 +4,6 @@ import asyncio
 import time
 import requests
 import os
-import shutil
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from pyrogram import enums
 from bs4 import BeautifulSoup
