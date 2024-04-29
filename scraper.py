@@ -49,11 +49,13 @@ async def all_video_scraping(bot,query):
         txt = await txt.edit(
             text=f"Found {len(video_links)} Videos", disable_web_page_preview=True
         )
+        print("all video scraping 2.1")
 
         if len(video_links):
             status = await message.reply_text("Checking...", quote=True)
             folder_name = f"{message.chat.id}-videos"
             os.makedirs(folder_name, exist_ok=True)
+            print("all video scraping 2.2")
 
             for idx, video_link in enumerate(video_links):
                 progress, percentage = await progress_bar(idx + 1, len(video_links))
@@ -62,6 +64,7 @@ async def all_video_scraping(bot,query):
                     await status.edit(
                         f"Downloading...{idx + 1}/{len(video_links)}\nPercentage: {percentage}%\nProgress: {progress}\n"
                     )
+                    print("all video scraping 2.3")
                 except:
                     pass
                 video_data, local_filename = await download_media(
