@@ -2,10 +2,6 @@ import shutil
 import requests
 from utils import FINISHED_PROGRESS_STR, UN_FINISHED_PROGRESS_STR
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-import os
-from selenium import webdriver
-from selenium.webdriver.firefox.options import Options as FirefoxOptions
-from selenium.webdriver.chrome.options import Options
 import math
 import os
 import time
