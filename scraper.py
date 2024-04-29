@@ -2,6 +2,7 @@
 
 import asyncio
 import time
+import shutil
 import requests
 import os
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
@@ -14,8 +15,6 @@ from helpers import (
     progress_bar,
     progress_for_pyrogram
 )
-import imageio
-from tqdm import tqdm
 
 
 async def scrape(url):
