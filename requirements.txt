@@ -7,3 +7,4 @@ requests
 TgCrypto
 urllib3
 pyromod
+html5lib
