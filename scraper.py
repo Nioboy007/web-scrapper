@@ -117,15 +117,19 @@ async def download_media(base_url, media_url, idx, media_type):
     try:
         with requests.get(media_url, stream=True) as response:
             response.raise_for_status()
+            print("Download media phase: 1 ")
 
             filename = os.path.basename(media_url)
             local_filename = f"{media_type}{idx}_{filename}"
+            print("Download media phase:  2 ") 
 
             with open(local_filename, "wb") as file:
                 shutil.copyfileobj(response.raw, file)
+                print("Download media phase:3 ")
 
             with open(local_filename, "rb") as file:
                 media_data = file.read()
+                print("Download media phase: 4 ")
 
             os.remove(local_filename)
             return media_data, local_filename
