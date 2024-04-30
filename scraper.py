@@ -11,7 +11,6 @@ from bs4 import BeautifulSoup
 from urllib.parse import quote
 from utils import REPO
 from helpers import (
-    download_media,
     progress_bar,
     progress_for_pyrogram
 )
@@ -110,17 +109,27 @@ async def all_video_scraping(bot,query):
         print(e)
         os.remove(zip_filename)
         error = f"ERROR: {(str(e))}"
-        error_link = f"{REPO}/issues/new?title={quote(error)}"
-        text = f"Something Bad occurred !!!\nCreate an issue here"
-        issue_markup = InlineKeyboardMarkup(
-            [[InlineKeyboardButton("Create Issue", url=error_link)]]
-        )
-        await message.reply_text(
-            text, disable_web_page_preview=True, quote=True, reply_markup=issue_markup
-        )
         return e
 
 
 
-###################
+async def download_media(base_url, media_url, idx, media_type):
+    try:
+        with requests.get(media_url, stream=True) as response:
+            response.raise_for_status()
+
+            filename = os.path.basename(media_url)
+            local_filename = f"{media_type}{idx}_{filename}"
+
+            with open(local_filename, "wb") as file:
+                shutil.copyfileobj(response.raw, file)
+
+            with open(local_filename, "rb") as file:
+                media_data = file.read()
+
+            os.remove(local_filename)
+            return media_data, local_filename
+    except Exception as e:
+        print(f"Error downloading media from {media_url}: {e}")
+        return None 
 
